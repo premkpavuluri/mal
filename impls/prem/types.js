@@ -20,7 +20,8 @@ class MalList extends MalValue {
   }
 
   pr_str() {
-    return '(' + this.value.map(x => x.pr_str()).join(' ') + ')';
+    const list = this.value.map(x => x instanceof MalValue ? x.pr_str() : x);
+    return '(' + list.join(' ') + ')';
   }
 
   isEmpty() {
@@ -34,7 +35,8 @@ class MalVector extends MalValue {
   }
 
   pr_str() {
-    return '[' + this.value.map(x => x.pr_str()).join(' ') + ']';
+    const vector = this.value.map(x => x instanceof MalValue ? x.pr_str() : x);
+    return '[' + vector.join(' ') + ']';
   }
 }
 
