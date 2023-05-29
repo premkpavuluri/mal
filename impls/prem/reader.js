@@ -1,4 +1,4 @@
-const { MalSymbol, MalList, MalVector, MalNil, MalBoolean } =
+const { MalSymbol, MalList, MalVector, MalNil, MalBoolean, MalKeyWord } =
   require('./types.js');
 
 class Reader {
@@ -67,14 +67,20 @@ const read_vector = (reader) => {
   return new MalVector(ast);
 };
 
+const read_keyword = (reader) => {
+  return new MalKeyWord(reader.next());
+};
+
 const read_form = (reader) => {
   const token = reader.peek();
 
-  switch (token) {
+  switch (token[0]) {
     case '(':
       return read_list(reader);
     case '[':
       return read_vector(reader);
+    case ':':
+      return read_keyword(reader);
     default:
       return read_atom(reader);
   }
