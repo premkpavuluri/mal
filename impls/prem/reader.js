@@ -1,4 +1,4 @@
-const { MalSymbol, MalList, MalVector, MalNil, MalBoolean, MalKeyWord } =
+const { MalSymbol, MalList, MalVector, MalNil, MalBoolean, MalKeyWord, MalString } =
   require('./types.js');
 
 class Reader {
@@ -32,11 +32,17 @@ const read_atom = (reader) => {
   if (token.match(/^-?[0-9]+$/)) {
     return parseInt(token);
   }
-  if (token === 'true' | token === 'false') {
-    return new MalBoolean(token);
+  if (token === 'true' || token === 'false') {
+    return new MalBoolean(token === 'true')
   }
   if (token === 'nil') {
     return new MalNil();
+  }
+  if (token[0] === ':') {
+    return new MalKeyWord(token);
+  }
+  if (token[0] == '"') {
+    return new MalString(token);
   }
 
   return new MalSymbol(token);
@@ -67,10 +73,6 @@ const read_vector = (reader) => {
   return new MalVector(ast);
 };
 
-const read_keyword = (reader) => {
-  return new MalKeyWord(reader.next());
-};
-
 const read_form = (reader) => {
   const token = reader.peek();
 
@@ -79,8 +81,6 @@ const read_form = (reader) => {
       return read_list(reader);
     case '[':
       return read_vector(reader);
-    case ':':
-      return read_keyword(reader);
     default:
       return read_atom(reader);
   }
