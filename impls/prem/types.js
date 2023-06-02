@@ -64,6 +64,18 @@ class MalString extends MalValue {
   }
 }
 
+class MalFunction extends MalValue {
+  constructor(ast, binds, oldEnv) {
+    super(ast);
+    this.binds = binds;
+    this.oldEnv = oldEnv;
+  }
+
+  pr_str() {
+    return '#<function>';
+  }
+}
+
 module.exports = {
   MalValue,
   MalSymbol,
@@ -72,5 +84,6 @@ module.exports = {
   MalNil,
   MalBoolean,
   MalKeyWord,
-  MalString
+  MalString,
+  MalFunction
 };
